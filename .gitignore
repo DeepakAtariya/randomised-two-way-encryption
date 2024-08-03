@@ -1,24 +1,61 @@
-# Compiled class file
-*.class
+# Node.js dependencies
+node_modules/
 
-# Log file
+# TypeScript cache and output directories
+dist/
+build/
+out/
+tmp/
+
+# TypeScript declaration files
+*.d.ts
+
+# TypeScript configuration files
+tsconfig.tsbuildinfo
+
+# Logs
+logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
-# BlueJ files
-*.ctxt
+# OS-specific files
+.DS_Store
+Thumbs.db
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# Editor and IDE specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+# Environment files
+.env
+.env.local
+.env.*.local
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+# Package-lock files
+package-lock.json
+yarn.lock
+
+# Coverage directory used by testing frameworks
+coverage/
+
+# Optional npm cache directory
+.npm/
+
+# Optional eslint cache
+.eslintcache
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# JetBrains IDEs
+/.idea/
+*.iml

@@ -1,0 +1,25 @@
+{
+  "name": "ts",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DeepakAtariya/randomised-two-way-encryption.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DeepakAtariya/randomised-two-way-encryption/issues"
+  },
+  "homepage": "https://github.com/DeepakAtariya/randomised-two-way-encryption#readme",
+  "description": "",
+  "dependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "@types/node": "^22.1.0",
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.2.0"
+  }
+}

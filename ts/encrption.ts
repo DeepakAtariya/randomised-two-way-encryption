@@ -1,4 +1,4 @@
-import CryptoJS from 'crypto-js';
+import CryptoJS, { enc } from 'crypto-js';
 import { randomBytes } from 'crypto';
 
 enum ALGO_NAME {
@@ -14,12 +14,18 @@ type TEncryptionCon = {
 type TEncryptionOutput = {
     encryptedForm: string;
     choice: number;
-    salt: string;
+    salt?: string;
+    scrambleKey?: string;
 }
 
 type TScrambleParams = {
     decryptKey: string;
     salt: string;
+}
+
+type TCache = {
+    fileName: string;
+    type: string;
 }
 
 class Encryption {
@@ -39,26 +45,50 @@ class Encryption {
     }
 
     encrypt(): boolean {
-        const algorithm: EncryptionAlgorithm = this.encryptionAlgorithm.getAlgorithm();
-        // Generate random bytes
-        const buffer = randomBytes(length);
-        // Convert bytes to a base64 string and slice to the required length
-        const salt: string = buffer.toString('base64').slice(0, length);
+        try {
+            const algorithm: EncryptionAlgorithm = this.encryptionAlgorithm.getAlgorithm();
+            const salt = this.generateRandomString(15);
 
-        algorithm.setEncryptionData(this.encryptionData);
-        algorithm.setSalt(salt);
-        const encryptedForm = algorithm.encryption();
+            algorithm.setEncryptionData(this.encryptionData);
+            algorithm.setSalt(salt);
+            const encryptedForm = algorithm.encryption();
 
-        const output: TEncryptionOutput = {
-            "choice": this.algoChoice,
-            "encryptedForm": encryptedForm,
-            "salt": salt
+            const output: TEncryptionOutput = {
+                "choice": this.algoChoice,
+                "encryptedForm": encryptedForm,
+                "salt": salt
+            }
+
+            // TODO : Writing code to generate the decription key
+            const decriptionKey = this.generateRandomString(15);
+
+            const scrambleKey = this.scramble({
+                "decryptKey": decriptionKey,
+                "salt": salt
+            });
+
+            const afterScramble: TEncryptionOutput = {
+                "choice": this.algoChoice,
+                "encryptedForm": encryptedForm,
+                "scrambleKey": scrambleKey
+            }
+
+            // forming the token
+            const finalisedToken = `${afterScramble.encryptedForm}.${afterScramble.choice}.${afterScramble.scrambleKey}`;
+
+            console.log("Encrypted successfullly");
+
+            // TODO : Create a classes that handles storing this keys. e.g file storage, cache, db, etc.
+
+
+
+        } catch (error) {
+            console.log(error);
+            return false;
         }
+        return true;
 
-        console.log("Encrypted successfullly");
-        console.log(output);
 
-        return false;
     }
 
     decrypt(): boolean {
@@ -68,10 +98,14 @@ class Encryption {
     }
 
     scramble(params: TScrambleParams): string {
-        // TODO : write 
+        // TODO : write the code to scramble the keys
         console.log("Scrambling the keys for the ");
-        
-        return "";
+        return `${params.decryptKey}.${params.salt}`;
+    }
+
+    generateRandomString(length): string {
+        const buffer = randomBytes(length);
+        return buffer.toString('base64').slice(0, length);
     }
 }
 
@@ -142,4 +176,30 @@ class AesEncryption extends EncryptionAlgorithm {
         const decryptedBytes = CryptoJS.AES.decrypt(this.encryptionData, this.salt);
         return CryptoJS.enc.Utf8.stringify(decryptedBytes);
     }
+}
+
+class Cache {
+    constructor(parameters: TCache) {
+
+    }
+
+    // async function createAndWriteFileStream(filePath: string, data: string) {
+    //     return new Promise<void>((resolve, reject) => {
+    //       const writeStream = createWriteStream(filePath);
+      
+    //       writeStream.on('error', (error) => {
+    //         console.error(`Error writing to file: ${error}`);
+    //         reject(error);
+    //       });
+      
+    //       writeStream.on('finish', () => {
+    //         console.log(`Data written to file: ${filePath}`);
+    //         resolve();
+    //       });
+      
+    //       writeStream.write(data);
+    //       writeStream.end();
+    //     });
+    //   }
+      
 }
